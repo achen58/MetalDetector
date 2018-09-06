@@ -1,3 +1,4 @@
+SENSOR CONTROL AND MOVEMENT
 # define trigPin1 3 // Front Sensor 
 # define echoPin1 8 // Front Sensor
 # define trigPin2 4 // Right Sensor
@@ -139,5 +140,71 @@ void loop() {
       }
     }
   }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+METAL DETECTOR 
+
+# define LED1 9 
+# define LED2 12
+# define LED3 13
+# define METALDETECT 2 
+
+int metaldetectval = 0;
+int METALCOUNTER = 0;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(LED3, OUTPUT);
+  delay(1000);
+}
+
+
+void loop() {
+  int metaldetectval = analogRead(A0); // read the input on analog pin 0:
+  if (metaldetectval < 200) { // NOISE
+    metaldetectval = 1000;
+  }
+  
+  if ((METALCOUNTER == 0) && (metaldetectval < 500)) {
+    METALCOUNTER = METALCOUNTER + 1;
+    delay(5000);
+  }
+  
+  else if ((METALCOUNTER == 1) && (metaldetectval < 500)) {
+    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, LOW);
+    digitalWrite(LED3, HIGH);
+    METALCOUNTER = METALCOUNTER + 1;
+    delay(5000);
+  }
+  
+  else if ((METALCOUNTER == 2) && (metaldetectval < 500)) {
+    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, HIGH);
+    digitalWrite(LED3, LOW);
+    METALCOUNTER = METALCOUNTER + 1;
+    delay(5000);
+  }
+
+  else if ((METALCOUNTER == 3) && (metaldetectval < 500)) {
+    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, HIGH);
+    digitalWrite(LED3, HIGH);
+    METALCOUNTER = METALCOUNTER + 1;
+    delay(5000);
+  }
+
+  else if ((METALCOUNTER == 4) && (metaldetectval < 500)) {
+    digitalWrite(LED1, HIGH);
+    digitalWrite(LED2, LOW);
+    digitalWrite(LED3, LOW);
+  }
+
+  Serial.print("MetalCounter : ");
+  Serial.println(METALCOUNTER);
+  Serial.print("Value : ");
+  Serial.println(metaldetectval);
 }
 
